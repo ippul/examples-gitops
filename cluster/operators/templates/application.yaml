@@ -1,0 +1,41 @@
+{{- range .Values.operators }}
+{{- if .enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .name }}
+  namespace: openshift-gitops
+  labels:
+    argocd.argoproj.io/instance: openshift-gitops
+spec:
+  sourceType: Helm
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .namespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    repoURL: https://redhat-cop.github.io/helm-charts
+    chart: operators-installer
+    targetRevision: 3.4.0
+    helm:
+      valuesObject:
+        operators-installer:
+          operatorGroups:
+            - name: {{ .namespace }}-{{ .name }}
+              createNamespace: {{ .createNamespace }}
+              targetOwnNamespace: {{ .targetOwnNamespace }}
+          operators:
+            - channel: {{ .channel }}
+              installPlanApproval: {{ .installPlanApproval }}
+              name: {{ .name }}
+              source: {{ .source }}
+              sourceNamespace: {{ .sourceNamespace }}
+              csv: {{ .csv }}
+              namespace: {{ .namespace }}
+              installPlanVerifierActiveDeadlineSeconds: {{ .installPlanVerifierActiveDeadlineSeconds }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,10 @@
+apiVersion: v2
+name: openshift-gitops
+description: A Helm chart for installing openshift-gitops
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+dependencies:
+  - name: operators-installer
+    version: "*"
+    repository: https://redhat-cop.github.io/helm-charts

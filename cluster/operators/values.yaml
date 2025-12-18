@@ -1,0 +1,12 @@
+operators:
+  - enabled: true
+    name: cert-manager
+    createNamespace: true
+    targetOwnNamespace: false
+    channel: stable-v1
+    installPlanApproval: Manual
+    source: redhat-operators
+    sourceNamespace: openshift-marketplace
+    csv: cert-manager-operator.v1.18.0
+    namespace: openshift-cert-manager-operator
+    installPlanVerifierActiveDeadlineSeconds: 1200
